@@ -1,0 +1,59 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Incident type:</strong>
+  <%= @incident.incident_type %>
+</p>
+
+<p>
+  <strong>Anonymous report:</strong>
+  <%= @incident.anonymous_report %>
+</p>
+
+<p>
+  <strong>Role:</strong>
+  <%= @incident.role %>
+</p>
+
+<p>
+  <strong>People involved:</strong>
+  <%= @incident.people_involved %>
+</p>
+
+<p>
+  <strong>Other observers:</strong>
+  <%= @incident.other_observers %>
+</p>
+
+<p>
+  <strong>Observed at:</strong>
+  <%= @incident.observed_at %>
+</p>
+
+<p>
+  <strong>Incident location:</strong>
+  <%= @incident.incident_location %>
+</p>
+
+<p>
+  <strong>Incident location details:</strong>
+  <%= @incident.incident_location_details %>
+</p>
+
+<p>
+  <strong>Incident description:</strong>
+  <%= @incident.incident_description %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @incident.user_id %>
+</p>
+
+<p>
+  <strong>Attachment:</strong>
+  <%= @incident.attachment %>
+</p>
+
+<%= link_to 'Edit', edit_incident_path(@incident) %> |
+<%= link_to 'Back', incidents_path %>

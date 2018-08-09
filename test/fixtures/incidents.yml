@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  incident_type: 1
+  anonymous_report: MyText
+  role: 1
+  people_involved: MyText
+  other_observers: MyText
+  observed_at: 2018-08-09 16:19:52
+  incident_location: 1
+  incident_location_details: MyText
+  incident_description: MyText
+  user_id: one
+  attachment: MyString
+
+two:
+  incident_type: 1
+  anonymous_report: MyText
+  role: 1
+  people_involved: MyText
+  other_observers: MyText
+  observed_at: 2018-08-09 16:19:52
+  incident_location: 1
+  incident_location_details: MyText
+  incident_description: MyText
+  user_id: two
+  attachment: MyString

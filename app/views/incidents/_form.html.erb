@@ -1,0 +1,98 @@
+<%= form_with(model: incident, local: true) do |form| %>
+  <% if incident.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(incident.errors.count, "error") %> prohibited this incident from being saved:</h2>
+
+      <ul>
+      <% incident.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :incident_type %>
+    <% Incident::INCIDENT_TYPES.each do |incident| %>
+      <div class="multiple-check">
+        <%= form.check_box :incident_type, { multiple: true }, incident, false %> <%= form.label incident %>
+      </div>
+    <% end %>
+  </div>
+
+
+  <div id="user-details">
+    <% form.fields_for :user  do |f| %>
+      <div class="field">
+        <%= f.label :name %>
+        <%= f.text_field :name %>
+      </div>
+
+      <div class="field">
+        <%= f.label :email %>
+        <%= f.text_field :email %>
+      </div>
+
+      <div class="field">
+        <%= f.label :phone %>
+        <%= f.text_field :phone %>
+      </div>
+
+      <div class="field">
+        <%= f.label :role %>
+        <%= f.number_field :role %>
+      </div>
+    <% end %>
+  </div>
+    
+
+  </div>
+  <div class="field">
+    <%= form.label :anonymous_report %>
+    <%= form.text_area :anonymous_report %>
+  </div>
+
+  <div class="field">
+    <%= form.label :people_involved %>
+    <%= form.text_area :people_involved %>
+  </div>
+
+  <div class="field">
+    <%= form.label :other_observers %>
+    <%= form.text_area :other_observers %>
+  </div>
+
+  <div class="field">
+    <%= form.label :observed_at %>
+    <%= form.datetime_select :observed_at %>
+  </div>
+
+  <div class="field">
+    <%= form.label :incident_location %>
+    <%= form.number_field :incident_location %>
+  </div>
+
+  <div class="field">
+    <%= form.label :incident_location_details %>
+    <%= form.text_area :incident_location_details %>
+  </div>
+
+  <div class="field">
+    <%= form.label :incident_description %>
+    <%= form.text_area :incident_description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :user_id_id %>
+    <%= form.text_field :user_id_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :attachment %>
+    <%= form.text_field :attachment %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
