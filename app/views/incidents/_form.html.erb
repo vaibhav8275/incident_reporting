@@ -1,98 +1,117 @@
-<%= form_with(model: incident, local: true) do |form| %>
-  <% if incident.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(incident.errors.count, "error") %> prohibited this incident from being saved:</h2>
+<%= form_with(model: incident, local: true, multipart: true) do |form| %>
+  <div class="two-column-layout">
+  <div class="one-half">
+      <% if incident.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(incident.errors.count, "error") %> prohibited this incident from being saved:</h2>
 
-      <ul>
-      <% incident.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
+          <ul>
+          <% incident.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+          </ul>
+        </div>
       <% end %>
-      </ul>
+
+      <div class="field checkbox">
+        <%= form.label :incident_types %>
+        <% Incident::INCIDENT_TYPES.each do |incident| %>
+          <div class="multiple-check">
+            <%= form.check_box :incident_types, { multiple: true }, incident, false %> <%= form.label incident %>
+          </div>
+        <% end %>
+      </div>
+
+
+      <div class="field">
+        <%= form.text_area :people_involved, placeholder: "Name and other details of people involved (student, teacher, staff, parent, grade level)" %>
+      </div>
+
+      <div class="field">
+        <%= form.text_area :other_observers, placeholder: "Name and details of Observers" %>
+      </div>
+
+      <div class="field">
+        <%= form.label :observed_at %>
+        <%= form.text_field :observed_at_string %>
+      </div>
+
+      <div class="field">
+        <%= form.label :incident_location %>
+        <%= form.select :incident_location, options_for_enum(Incident, :incident_location, @incident)  %>    
+      </div>
+
+      <div class="field">
+        <%= form.text_area :incident_location_details, "data-depends-on" => "#incident_incident_location", "data-depends-on-value" => "more_details", placeholder: "Incident location details" %>
+      </div>
+
+      <div class="field">
+        <%= form.text_area :incident_description, placeholder: "Incident Description" %>
+      </div>
+
+
+      <%= render "attachments" if action_name == 'edit' %>
+      <div class="field">
+        <%= form.label :attachment %>
+        <%= form.file_field :attachments, multiple: true %>
+      </div>
+
+
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :incident_type %>
-    <% Incident::INCIDENT_TYPES.each do |incident| %>
-      <div class="multiple-check">
-        <%= form.check_box :incident_type, { multiple: true }, incident, false %> <%= form.label incident %>
+    <div class="one-half">
+      <% if (action_name == 'edit' && @incident.user.id == 1) || action_name == 'new' || action_name == 'create' %>
+      <div class="field checkbox">
+        <%= form.check_box :submit_anonymously, :checked => (@incident.user.id == 1) ? true : false %>
+        <%= form.label :submit_anonymously %>
       </div>
-    <% end %>
-  </div>
+      <% end %>
 
+      <% if @incident.user.id != 1 %>
+      <div id="user-details">
+        <h2> User Details</h2>
+        <%= form.fields_for :user do |f| %>
+          <div class="field">
+            <%= f.label :name %>
+            <%= f.text_field :name %>
+          </div>
 
-  <div id="user-details">
-    <% form.fields_for :user  do |f| %>
-      <div class="field">
-        <%= f.label :name %>
-        <%= f.text_field :name %>
+          <div class="field">
+            <%= f.label :email %>
+            <%= f.text_field :email %>
+          </div>
+
+          <div class="field">
+            <%= f.label :phone %>
+            <%= f.text_field :phone %>
+          </div>
+
+          <div class="field">
+            <%= f.label :role %>
+            <%= f.select :role, options_for_enum(User, :role, @incident.user)  %>
+          </div>
+        <% end %>
       </div>
-
-      <div class="field">
-        <%= f.label :email %>
-        <%= f.text_field :email %>
-      </div>
-
-      <div class="field">
-        <%= f.label :phone %>
-        <%= f.text_field :phone %>
-      </div>
-
-      <div class="field">
-        <%= f.label :role %>
-        <%= f.number_field :role %>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
-    
-
-  </div>
-  <div class="field">
-    <%= form.label :anonymous_report %>
-    <%= form.text_area :anonymous_report %>
-  </div>
-
-  <div class="field">
-    <%= form.label :people_involved %>
-    <%= form.text_area :people_involved %>
-  </div>
-
-  <div class="field">
-    <%= form.label :other_observers %>
-    <%= form.text_area :other_observers %>
-  </div>
-
-  <div class="field">
-    <%= form.label :observed_at %>
-    <%= form.datetime_select :observed_at %>
-  </div>
-
-  <div class="field">
-    <%= form.label :incident_location %>
-    <%= form.number_field :incident_location %>
-  </div>
-
-  <div class="field">
-    <%= form.label :incident_location_details %>
-    <%= form.text_area :incident_location_details %>
-  </div>
-
-  <div class="field">
-    <%= form.label :incident_description %>
-    <%= form.text_area :incident_description %>
-  </div>
-
-  <div class="field">
-    <%= form.label :user_id_id %>
-    <%= form.text_field :user_id_id %>
-  </div>
-
-  <div class="field">
-    <%= form.label :attachment %>
-    <%= form.text_field :attachment %>
-  </div>
-
+  <hr/>
   <div class="actions">
-    <%= form.submit %>
+      <%= form.submit %>
   </div>
 <% end %>
+
+<% 
+=begin %>
+
+<% if action_name == 'edit' %>
+  <h1> Add more attachments</h1>
+  <%= render "attachments" %>
+  <%= form_for @incident, url: incident_attachments_path(@incident), method: :post do |f| %> 
+    <%= f.label :attachment %>
+    <%= f.file_field :attachments, multiple: true %>
+    <%= f.submit "Add More Attachments" %>
+  <% end %>
+<% end %>
+
+<% 
+=end %>

@@ -13,4 +13,17 @@
  *= require_tree .
  *= require_self
  */
-.multiple-check label{ display: inline; }
+
+ hr {
+ 	border: 0;
+ 	border-top: 1px solid #cecece;
+ 	margin: 15px 0;
+ 	width: 100%;
+ }
+.checkbox label{ display: inline; }
+
+.two-column-layout {display: flex; flex-wrap: wrap;}
+.two-column-layout .one-half {flex: 0 0 50%; max-width: 50%;}
+@media (max-width: 767px) {
+	.two-column-layout .one-half {flex: 0 0 100%; max-width: 100%;}
+}

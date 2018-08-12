@@ -13,16 +13,15 @@
 ActiveRecord::Schema.define(version: 2018_08_09_104952) do
 
   create_table "incidents", force: :cascade do |t|
-    t.text "incident_type"
-    t.text "anonymous_report"
+    t.text "incident_types"
     t.text "people_involved"
     t.text "other_observers"
     t.datetime "observed_at"
     t.integer "incident_location"
     t.text "incident_location_details"
     t.text "incident_description"
-    t.integer "user_id"
-    t.string "attachment"
+    t.integer "user_id", default: 1
+    t.text "attachments"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_incidents_on_user_id"

@@ -15,6 +15,7 @@ class IncidentsController < ApplicationController
   # GET /incidents/new
   def new
     @incident = Incident.new
+    @incident.user = User.new
   end
 
   # GET /incidents/1/edit
@@ -25,12 +26,18 @@ class IncidentsController < ApplicationController
   # POST /incidents.json
   def create
     @incident = Incident.new(incident_params)
+    # Hard Coding is not a good practise but with db:seed we are generating anonymous user as first user
+    # and querying db everytime won't be good idea. That will remain same always.
+    # or we can initialize anonymous user id as constant to use application wide.
+    @incident.user_id =  1  if incident_params[:submit_anonymously] == "1"
 
     respond_to do |format|
       if @incident.save
-        format.html { redirect_to @incident, notice: 'Incident was successfully created.' }
+        puts "============redirecting as well"
+        format.html { redirect_to @incident, notice: 'Thanks for submitting incident report.' }
         format.json { render :show, status: :created, location: @incident }
       else
+        puts "===============render new"
         format.html { render :new }
         format.json { render json: @incident.errors, status: :unprocessable_entity }
       end
@@ -41,7 +48,9 @@ class IncidentsController < ApplicationController
   # PATCH/PUT /incidents/1.json
   def update
     respond_to do |format|
-      if @incident.update(incident_params)
+      new_params = incident_params
+      new_params[:attachments] = add_more_attachments(incident_params[:attachments]) if incident_params[:attachments]
+      if @incident.update(new_params)
         format.html { redirect_to @incident, notice: 'Incident was successfully updated.' }
         format.json { render :show, status: :ok, location: @incident }
       else
@@ -69,6 +78,11 @@ class IncidentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def incident_params
-      params.require(:incident).permit(:incident_type, :anonymous_report, :people_involved, :other_observers, :observed_at, :incident_location, :incident_location_details, :incident_description, :user_id_id, :attachment)
+      params.require(:incident).permit({:incident_types => []}, :submit_anonymously, :people_involved, :other_observers, :observed_at_string, :incident_location, :incident_location_details, :incident_description, {attachments: []}, user_attributes: [:name, :email, :phone, :role])
+    end
+
+    def add_more_attachments(new_attachments)
+      attachments = @incident.attachments 
+      attachments += new_attachments
     end
 end

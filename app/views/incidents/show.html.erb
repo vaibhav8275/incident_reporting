@@ -2,17 +2,25 @@
 
 <p>
   <strong>Incident type:</strong>
-  <%= @incident.incident_type %>
+  <%= @incident.incident_types.join(", ") %>
 </p>
 
 <p>
-  <strong>Anonymous report:</strong>
-  <%= @incident.anonymous_report %>
+  <strong>Name:</strong>
+  <%= @incident.user.name %>
+</p>
+<p>
+  <strong>Email:</strong>
+  <%= @incident.user.email %>
+</p>
+<p>
+  <strong>Phone:</strong>
+  <%= @incident.user.phone %>
 </p>
 
 <p>
   <strong>Role:</strong>
-  <%= @incident.role %>
+  <%= @incident.user.role %>
 </p>
 
 <p>
@@ -35,25 +43,19 @@
   <%= @incident.incident_location %>
 </p>
 
+<% if @incident.incident_location_details.present? %>
 <p>
   <strong>Incident location details:</strong>
   <%= @incident.incident_location_details %>
 </p>
+<% end %>
 
 <p>
   <strong>Incident description:</strong>
   <%= @incident.incident_description %>
 </p>
 
-<p>
-  <strong>User:</strong>
-  <%= @incident.user_id %>
-</p>
-
-<p>
-  <strong>Attachment:</strong>
-  <%= @incident.attachment %>
-</p>
+<%= render "attachments" %>
 
 <%= link_to 'Edit', edit_incident_path(@incident) %> |
 <%= link_to 'Back', incidents_path %>

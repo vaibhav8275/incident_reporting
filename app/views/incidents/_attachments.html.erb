@@ -1,0 +1,9 @@
+<p>
+  <strong>Attachment:</strong>
+  <% @incident.attachments.each_with_index do |attachment, index| #grab the index %> 
+    <div> 
+      <%= link_to attachment.file.filename, attachment.url %>
+      <%= link_to "Delete", incident_attachment_path(@incident, index), :method => :delete, data: { confirm: "Are you sure you want to delete this image?" } %>
+    </div>
+  <% end %>  
+</p>
